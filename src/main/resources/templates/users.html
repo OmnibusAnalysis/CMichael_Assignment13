@@ -1,6 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+	<title>Users</title>
+</head>
+
+<body>
+	<h1>Users</h1>
+
+	<div th:if="${#lists.size(users} == 1}">
+		<form action="" method="post">
+            <div>
+				<label for="username">Username:  </label>
+				<input type="text" id="username" th:field="${user.username}" />
+			</div>
+			<div>
+				<label for="password">Password: </label>
+				<input type="password" id="password" th:field="${user.password}" />
+			</div>
+			<div>
+				<label for="name">Name: </label>
+				<input type="text" id="name" th:field="${user.name}" />
+			</div>
+
+		<h2>Address Information</h2>
+			<div>
+				<label for="addressLine1">Address Line 1: </label>
+				<input type="text" id="addressLine1" th:field="${user.address.addressLine1}" />
+			</div>
+			<div>
+				<label for="addressLine2">Address Line 2: </label>
+				<input type="text" id="addressLine2" th:field="${user.address.addressLine2}" />
+			</div>
+			<div>
+				<label for="city">City: </label>
+				<input type="text" id="city" th:field="${user.address.citu}" />
+			</div>
+			<div>
+				<label for="state">State: </label>
+				<input type="text" id="state" th:field="${user.address.state}" />
+			</div>
+			<div>
+				<label for="region">Region: </label>
+				<input type="text" id="region" th:field="${user.address.region}" />
+			</div>
+			<div>
+				<label for="country">Country: </label>
+				<input type-="text" id="country" th:field="${user.address.country}" />
+			</div>
+			<div>
+				<label for="zipCode">Zip Code: </label>
+				<input type="text" id="zipCode" th:field="${user.address.zipCode}" />
+			</div>
+			<div>
+				<input type="submit" value="Update User Account" />
+			</div>
+        </form>
+        <form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">
+            <input type="submit" value="Delete User Account" />
+        </form>
+	</div>
+
+
+</body>
+
+
+<!--
 	<head>
+
 		<title>Users</title>
 	</head>
 	<body>
@@ -38,3 +105,4 @@
 		</div>
 	</body>
 </html>
+-->
