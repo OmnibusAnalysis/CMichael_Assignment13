@@ -80,17 +80,24 @@ public class UserController {
 			accountService.saveAccount(newAccount);
 			user.addAccount(newAccount);
 			userService.saveUser(user);
+			return "redirect:/users" + userId +"/accounts/" + newAccount.getAccountId();
 		}
 		return "redirect:/users/" + userId;
 	}
 
-//	@GetMapping("/users/{userId}")
-//	public String getAccount (ModelMap model, @PathVariable Long userId) {
-//		User user = userService.findById(userId);
-//		model.put("users", Arrays.asList(user));
-//		model.put("user", user);
-//		return "users";
-//	}
+	@GetMapping("/users/{userId}/accounts/{accountId}")
+	public String getAccountDetails(@PathVariable Long userId,
+									@PathVariable Long accountId, ModelMap model) {
+		User user = userService.findById(userId);
+		Account account = accountService.findById(accountId);
+		if (user != null && account !=null) {
+			model.put("user", user);
+			model.put("account", account);
+			return "account";
+		}
+
+		return "redirect:/users/" +userId;
+	}
 
 }
 

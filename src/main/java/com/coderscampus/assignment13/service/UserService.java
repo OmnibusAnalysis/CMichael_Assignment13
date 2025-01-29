@@ -15,9 +15,11 @@ import com.coderscampus.assignment13.domain.User;
 import com.coderscampus.assignment13.repository.AccountRepository;
 import com.coderscampus.assignment13.repository.UserRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired
@@ -45,7 +47,7 @@ public class UserService {
 			return new User();
 	}
 
-	public Set<User> findAll () {
+	public Set<User> findAll() {
 		return userRepo.findAllUsersWithAccountsAndAddresses();
 	}
 
@@ -82,9 +84,22 @@ public class UserService {
 		return userRepo.save(user);
 	}
 
+	@Transactional
 	public void delete(Long userId) {
-		userRepo.deleteById(userId);
-	}
+		User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
 
+		for (Account account : user.getAccounts()) {
+			account.getUsers().remove(user);
+			accountRepo.save(account);
+		}
+
+		user.getAccounts().clear();
+
+		if (user.getAddress() != null) {
+			addressRepo.delete(user.getAddress());
+			user.setAddress(null);
+		}
+
+		userRepo.delete(user);
+	}
 }
- 
