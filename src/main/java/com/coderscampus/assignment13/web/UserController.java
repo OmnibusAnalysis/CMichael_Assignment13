@@ -24,17 +24,15 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
+
 	@GetMapping("/register")
 	public String getCreateUser (ModelMap model) {
-
 		model.put("user", new User());
-
 		return "register";
 	}
 
 	@PostMapping("/register")
 	public String postCreateUser (User user) {
-		System.out.println(user);
 		userService.saveUser(user);
 		return "redirect:/register";
 	}
@@ -42,7 +40,6 @@ public class UserController {
 	@GetMapping("/users")
 	public String getAllUsers (ModelMap model) {
 		Set<User> users = userService.findAll();
-
 		model.put("users", users);
 		if (users.size() == 1) {
 			model.put("user", users.iterator().next());
@@ -68,7 +65,7 @@ public class UserController {
 	@PostMapping("/users/{userId}/delete")
 	public String deleteOneUser (@PathVariable Long userId) {
 		userService.delete(userId);
-		return "redirect:/users";
+		return "redirect:/users/";
 	}
 
 	@PostMapping("/users/{userId}/accounts")
@@ -77,10 +74,11 @@ public class UserController {
 		if (user != null) {
 			Account newAccount = new Account();
 			newAccount.setAccountName("New Account");
+			newAccount.addUser(user);
 			accountService.saveAccount(newAccount);
 			user.addAccount(newAccount);
 			userService.saveUser(user);
-			return "redirect:/users" + userId +"/accounts/" + newAccount.getAccountId();
+			return "redirect:/users/" + userId +"/accounts/" + newAccount.getAccountId();
 		}
 		return "redirect:/users/" + userId;
 	}

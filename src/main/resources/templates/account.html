@@ -5,16 +5,20 @@
 </head>
 <body>
     <h1>Account Details</h1>
-    <form th:action="@{users/{userId}/accounts/{accountId}(userId=${user.userId}, accountId=+${account.accountId})}" methods="psot">
-        <div>
-            <label for="accountName">Account Name: </label>
-            <input type="text" id="accountName" name="accountName" th:value="${account.accountName}"/>
-        </div>
-        <div>
-            <input type="submit" value="Save Account" />
-        </div>
-    </form>
+
+    <div>
+       <form action="@{/users/{userId}/account/{accountId} (userId=${user.userId}. accountId=${account.accountId})}"
+             method="post" >
+           <div>
+               Account Name: <input th:type="text" th:field="${account.accountName}" th:value="${account.accountName}"/>
+           </div>
+           <div>
+               <input type="submit" value="Update Account" />
+           </div>
+       </form>
+    </div>
     <hr/>
-    <a th:herf="@{/users/{userId}("userId="${user.userId})}">Back</a>
+
+    <a th:href="@{/users/{userId} (userId = ${user.userId})}">Back</a>
 </body>
 </html>
