@@ -71,12 +71,6 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{userId}/accounts")
-	public String postAccount(@PathVariable Long userId) {
-		accountService.saveAccount(userId);
-		return "redirect:/users" + userId;
-	}
-
-	@PostMapping("/users/{userId}/accounts")
 	public String createNewAccount(@PathVariable Long userId) {
 		User user = userService.findById(userId);
 		if (user != null) {
@@ -105,14 +99,23 @@ public class UserController {
 		return "redirect:/users/" +userId;
 	}
 
-	@GetMapping("/users/{userId}/accounts/{accountId}")
+	@PostMapping("/users/{userId}/accounts/{accountId}")
 	public String changeAccountName(@PathVariable Long userId, @PathVariable Long accountId, Account account) {
-		account.setAccountName(account.getAccountName());
-		accountService.saveAccount(account);
-		userService.saveUser(userService.findById(userId));
-		return "redirect;/users/"+userId+"/accounts/"+accountId;
+		Account existingAccount = accountService.findById(accountId);
+		if (existingAccount != null) {
+			existingAccount.setAccountName(account.getAccountName());
+			accountService.saveAccount(existingAccount);
+			userService.saveUser(userService.findById(userId));
+		}
+		return "redirect:/users/" + userId + "/accounts/" + accountId;
+
+
+//		account.setAccountName(account.getAccountName());
+//		accountService.saveAccount(account);
+//		userService.saveUser(userService.findById(userId));
+//		return "redirect:/users/" + userId + "/accounts/" + accountId;
+//	}
+
+
 	}
-
-
 }
-
