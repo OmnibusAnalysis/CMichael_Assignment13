@@ -40,6 +40,7 @@ public class UserController {
 	@GetMapping("/users")
 	public String getAllUsers (ModelMap model) {
 		Set<User> users = userService.findAll();
+		System.out.println(users);
 		model.put("users", users);
 		if (users.size() == 1) {
 			model.put("user", users.iterator().next());
@@ -51,6 +52,7 @@ public class UserController {
 	@GetMapping("/users/{userId}")
 	public String getOneUser (ModelMap model, @PathVariable Long userId) {
 		User user = userService.findById(userId);
+		System.out.println(user.getAccounts());
 		model.put("users", Arrays.asList(user));
 		model.put("user", user);
 		return "users";
@@ -59,13 +61,19 @@ public class UserController {
 	@PostMapping("/users/{userId}")
 	public String postOneUser (@PathVariable Long userId, User user) {
 		userService.saveUser(user);
-		return "redirect:/users/" + userId;
+		return "redirect:/users/" + user.getUserId();
 	}
 
 	@PostMapping("/users/{userId}/delete")
 	public String deleteOneUser (@PathVariable Long userId) {
 		userService.delete(userId);
 		return "redirect:/users/";
+	}
+
+	@PostMapping("/users/{userId}/accounts")
+	public String postAccount(@PathVariable Long userId) {
+		accountService.saveAccount(userId);
+		return "redirect:/users" + userId;
 	}
 
 	@PostMapping("/users/{userId}/accounts")
@@ -96,6 +104,15 @@ public class UserController {
 
 		return "redirect:/users/" +userId;
 	}
+
+	@GetMapping("/users/{userId}/accounts/{accountId}")
+	public String changeAccountName(@PathVariable Long userId, @PathVariable Long accountId, Account account) {
+		account.setAccountName(account.getAccountName());
+		accountService.saveAccount(account);
+		userService.saveUser(userService.findById(userId));
+		return "redirect;/users/"+userId+"/accounts/"+accountId;
+	}
+
 
 }
 

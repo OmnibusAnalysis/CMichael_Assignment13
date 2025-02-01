@@ -72,11 +72,20 @@ public class UserService {
 
 			if (user.getAddress() == null) {
 				Address address = new Address();
-				address.setUser(user);
 				user.setAddress(address);
+				address.setUser(user);
+				accountRepo.save(savings);
 			}
-		} else {
-			if (user.getAddress().getUserId() == null) {
+
+			if(user.getAddress() == null) {
+				Address address = new Address();
+				user.setAddress(address);
+				address.setUser(user);
+				addressRepo.save(address);
+			}
+
+			if(user.getAddress().getUser() == null) {
+				user.getAddress().setUser(user);
 				user.getAddress().setUserId(user.getUserId());
 			}
 		}
@@ -86,20 +95,16 @@ public class UserService {
 
 	@Transactional
 	public void delete(Long userId) {
-		User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+		userRepo.deleteById(userId);
+	}
 
-		for (Account account : user.getAccounts()) {
-			account.getUsers().remove(user);
-			accountRepo.save(account);
-		}
+	public Account findAccountBy(Long accountId) {
+		Optional<Account> account = accountRepo.findById(accountId);
+		return account.orElse(new Account());
+	}
 
-		user.getAccounts().clear();
-
-		if (user.getAddress() != null) {
-			addressRepo.delete(user.getAddress());
-			user.setAddress(null);
-		}
-
-		userRepo.delete(user);
+	public Account saveAccount(Account account) {
+		accountRepo.save(account);
+		return account;
 	}
 }

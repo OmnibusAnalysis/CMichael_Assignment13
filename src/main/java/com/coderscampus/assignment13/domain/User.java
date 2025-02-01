@@ -23,7 +23,7 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "account_id"))
 	private List<Account> accounts = new ArrayList<>();
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
 	private Address address;
 
 	public Long getUserId() {
