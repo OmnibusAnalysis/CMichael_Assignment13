@@ -56,7 +56,7 @@ public class UserService {
 		return userOpt.orElse(new User());
 	}
 
-	public User saveUser(User user) {
+	public void saveUser(User user) {
 		if (user.getUserId() == null) {
 			Account checking = new Account();
 			checking.setAccountName("Checking Account");
@@ -90,7 +90,7 @@ public class UserService {
 			}
 		}
 
-		return userRepo.save(user);
+		userRepo.save(user);
 	}
 
 	@Transactional

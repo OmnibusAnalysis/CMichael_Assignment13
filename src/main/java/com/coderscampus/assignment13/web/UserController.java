@@ -110,12 +110,6 @@ public class UserController {
 		return "redirect:/users/" + userId + "/accounts/" + accountId;
 
 
-//		account.setAccountName(account.getAccountName());
-//		accountService.saveAccount(account);
-//		userService.saveUser(userService.findById(userId));
-//		return "redirect:/users/" + userId + "/accounts/" + accountId;
-//	}
-
 
 	}
 }
