@@ -1,85 +1,181 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Users</title>
 </head>
-
 <body>
-    <h1>Users</h1>
+<h1>Users</h1>
 
-    <div th:if="${#lists.size(users) == 1}">
-        <form action="" method="post">
-            <div>
-                <label for="username">Username: </label>
-                <input type="text" id="username" th:field="${user.username}" />
-            </div>
-            <div>
-                <label for="password">Password: </label>
-                <input type="password" id="password" th:field="${user.password}" />
-            </div>
-            <div>
-                <label for="fullName">Name: </label>
-                <input type="text" id="fullName" th:field="${user.name}" />
-            </div>
-            <hr/>
+<div th:if="${#lists.size(users) == 1}">
+    <form action="" method="post">
+        <div>
+            Username: <input type="text" th:field="${user.username}" />
+        </div>
+        <div>
+            Password: <input type="password" th:field="${user.password}" />
+        </div>
+        <div>
+            Full Name: <input type="text" th:field="${user.name}" />
+        </div>
+        <hr/>
+        <!-- Need to insert the users address values here -->
+        <div>
+            Address Line 1: <input type="text" th:field="${user.address.addressLine1}"/>
+        </div>
+        <div>
+            Address Line 2: <input type="text" th:field="${user.address.addressLine2}"/>
+        </div>
+        <div>
+            City: <input type="text" th:field="${user.address.city}"/>
+        </div>
+        <div>
+            Region: <input type="text" th:field="${user.address.region}"/>
+        </div>
+        <div>
+            Country: <input type="text" th:field="${user.address.country}"/>
+        </div>
+        <div>
+            Zip Code: <input type="text" th:field="${user.address.zipCode}"/>
+        </div>
+        <br/>
+        <div>
+            <input type="hidden" th:field="${user.accounts}"/>
+            <input type="submit" value="Update User Account"/>
+        </div>
+    </form>
+    <form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">
+        <input type="submit" value="Delete User Account" />
+    </form>
+    <hr/>
+    <h3>Accounts</h3>
 
-        <h2>Address Info</h2>
-            <div>
-                <label for="addressLine1">Address Line 1: </label>
-                <input th:type="text" id="addressLine1" th:field="${user.address.addressLine1}" />
-            </div>
-            <div>
-                <label for="addressLine2">Address Line 2: </label>
-                <input th:type="text" id="addressLine2" th:field="${user.address.addressLine2}" />
-            </div>
-            <div>
-                <label for="city">City: </label>
-                <input th:type="text" id="city" th:field="${user.address.city}" />
-            </div>
-            <div>
-                <label for="region">Region: </label>
-                <input th:type="text" id="region" th:field="${user.address.region}" />
-            </div>
-            <div>
-                <label for="country">Country: </label>
-                <input th:type="text" id="country" th:field="${user.address.country}" />
-            </div>
-            <div>
-                <label for="zipCode">Zip Code: </label>
-                <input th:type="text" id="zipCode" th:field="${user.address.zipCode}" />
-            </div>
-
-            <div>
-                <input type="Submit" value="Update User Account" />
-            </div>
-        </form>
-            <div>
-                <form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">
-                    <input type="submit" value="Delete User Account" />
-                </form>
-            </div>
-            <hr/>
-
-        <h2>Accounts</h2>
-        <ul>
-            <li th:each="account : ${user.accounts}">
-                <a th:href="@{/users/{userId}/accounts/{accountId}(userId=${user.userId}, accountId=${account.accountId})}"
-                   th:text="${account.accountName}"></a>
-            </li>
-        </ul>
-
-        <form th:action="@{/users/{userId}/accounts(userId=${user.userId})}" method="post">
-            <input type="submit" value="Create New Account"/>
-        </form>
-        <a href="/users">Return</a>
+    <div th:each="account : ${user.accounts}">
+        <a th:href="@{/users/{userId}/accounts/{accountId} (userId=${user.userId}, accountId=${account.accountId})}"><span th:text="${account.accountName}"></span></a>
     </div>
+    <form th:action="@{/users/{userId}/accounts (userId=${user.userId})}" method="post">
+        <input type="submit" value="Create New Bank Account"/></form><br/><br/>
+    <a href="/users">Back</a>
+</div>
 
-    <div th:unless="${#lists.size(users) == 1}" th:each="user : ${users}">
-        <a th:href="@{/users/{userId}(userId = ${user.userId})}" th:text="${user.userId}"></a><br/>
-        <span th:text="${user.username}"></span><br/>
-        <span th:text="${user.name}"></span><br/>
-        <span th:text="${user.password}"></span><br/>
+<div th:unless="${#lists.size(users) == 1}" th:each="user : ${users}">
+
+    <a th:href="@{/users/{userId}(userId=${user.userId})}"><span th:text="${user.userId}"></span></a><br/>
+    <span th:text="${user.username}"></span><br/>
+    <span th:text="${user.name}"></span><br/>
+    <span th:text="${user.password}"></span>
+    <div th:each="account : ${user.accounts}">
+        <span th:text="${account.accountName}"></span>
     </div>
+    <hr/>
+</div>
 </body>
 </html>
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Users</title>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--    <h1>Users</h1>-->
+
+<!--    <div th:if="${user != null}">-->
+<!--        <p>Name: <span th:text="${user.name}"></span></p>-->
+<!--        <p>Username: <span th:text="${user.username}"></span></p>-->
+<!--        <h2>Accounts:</h2>-->
+<!--        <ul>-->
+<!--            <li th:each="account : ${user.accounts}">-->
+<!--                <a th:href="@{/users/{userId}/accounts/{accountId}(userId=${user.userId}, accountId=${account.accountId})}"-->
+<!--                   th:text="${account.accountName}"></a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+<!--    <div th:if="${#lists.size(users) == 1}">-->
+<!--        <form th:action="@{/users/{userId}(userId=${user.userId})}" th:object="${user}" method="post">-->
+<!--            <div>-->
+<!--                <label for="username">Username: </label>-->
+<!--                <input type="text" id="username" th:field="*{username}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="password">Password: </label>-->
+<!--                <input type="password" id="password" th:field="*{password}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="fullName">Name: </label>-->
+<!--                <input type="text" id="fullName" th:field="*{name}" />-->
+<!--            </div>-->
+<!--            <hr/>-->
+
+<!--            <h2>Address Info</h2>-->
+<!--            <div>-->
+<!--                <label for="addressLine1">Address Line 1: </label>-->
+<!--                <input type="text" id="addressLine1" th:field="*{address.addressLine1}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="addressLine2">Address Line 2: </label>-->
+<!--                <input type="text" id="addressLine2" th:field="*{address.addressLine2}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="city">City: </label>-->
+<!--                <input type="text" id="city" th:field="*{address.city}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="region">Region: </label>-->
+<!--                <input type="text" id="region" th:field="*{address.region}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="country">Country: </label>-->
+<!--                <input type="text" id="country" th:field="*{address.country}" />-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="zipCode">Zip Code: </label>-->
+<!--                <input type="text" id="zipCode" th:field="*{address.zipCode}" />-->
+<!--            </div>-->
+
+<!--            <div>-->
+<!--                <input type="submit" value="Update User Account" />-->
+<!--            </div>-->
+<!--        </form>-->
+<!--            <div>-->
+<!--                <form th:action="@{/users/{userId}/delete(userId=${user.userId})}" method="post">-->
+<!--                    <input type="submit" value="Delete User Account" />-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <hr/>-->
+
+<!--        <h2>Accounts</h2>-->
+<!--        <div th:each="account : ${user.accounts}">-->
+<!--            <a th:href="@{/users/{userId}/accounts/{accountid} (userId=${user.userId}, accountId=${account.accountId})}">-->
+<!--                <span th:text="${account.accountName}"></span>-->
+<!--            </a>-->
+<!--        </div>-->
+
+<!--        <form th:action="@{/users/{userId}/accounts (userId=${user.userId})}" method="post">-->
+<!--            <input type="submit" value="Create Account"/>-->
+<!--        </form>-->
+<!--        <hr/>-->
+
+<!--        <a href="/users">Back</a>-->
+
+<!--    </div>-->
+
+<!--    <div th:unless="${#lists.size(users) == 1}" th:each="user : ${users}">-->
+<!--        <a th:href="@{/users/{userId}(userId=${user.userId})}">-->
+<!--            <span th:text="${user.userId}"></span>-->
+<!--        </a>-->
+<!--        <br/>-->
+<!--        <span th:text="${user.username}"></span><br/>-->
+<!--        <span th:text="${user.name}"></span><br/>-->
+<!--        <span th:text="${user.password}"></span><br/>-->
+<!--        <div th:each="account : ${user.accounts}">-->
+<!--            <span th:text="${account.accountName}"></span>-->
+<!--        </div>-->
+<!--        <hr/>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->

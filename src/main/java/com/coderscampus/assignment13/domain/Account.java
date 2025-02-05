@@ -15,10 +15,10 @@ public class Account {
 	@Column(length = 100)
 	private String accountName;
 
-	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "account")
 	private List<Transaction> transactions = new ArrayList<>();
 
-	@ManyToMany(mappedBy = "accounts", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "accounts", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
 	private List<User> users = new ArrayList<>();
 	
 	// G&S
@@ -53,7 +53,7 @@ public class Account {
 		if (this.users == null) {
 			this.users = new ArrayList<>();
 		}
-		if (!this.users.contains(user)) {
+		if(!this.users.contains(user)) {
 			this.users.add(user);
 			user.addAccount(this);
 		}
@@ -64,13 +64,6 @@ public class Account {
 			this.users.remove(user);
 			user.removeAccount(this);
 		}
-	}
-	public void setUsers(List<User> users) {
-		this.users.clear();
-		if(users != null) {
-			for (User user : users) {
-				addUser(user);
-			}
-		}
+
 		}
 }

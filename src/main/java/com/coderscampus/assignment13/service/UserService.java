@@ -56,41 +56,19 @@ public class UserService {
 		return userOpt.orElse(new User());
 	}
 
-	public void saveUser(User user) {
-		if (user.getUserId() == null) {
-			Account checking = new Account();
-			checking.setAccountName("Checking Account");
-			checking.getUsers().add(user);
-			Account savings = new Account();
-			savings.setAccountName("Savings Account");
-			savings.getUsers().add(user);
+	public User saveUser(User user) {
+		if (user.getAddress() == null) {
+			Address address = new Address();
 
-			user.getAccounts().add(checking);
-			user.getAccounts().add(savings);
-			accountRepo.save(checking);
-			accountRepo.save(savings);
-
-			if (user.getAddress() == null) {
-				Address address = new Address();
-				user.setAddress(address);
-				address.setUser(user);
-				accountRepo.save(savings);
-			}
-
-			if(user.getAddress() == null) {
-				Address address = new Address();
-				user.setAddress(address);
-				address.setUser(user);
-				addressRepo.save(address);
-			}
-
-			if(user.getAddress().getUser() == null) {
-				user.getAddress().setUser(user);
-				user.getAddress().setUserId(user.getUserId());
-			}
+			user.setAddress(address);
+			address.setUser(user);
+			addressRepo.save(address);
 		}
-
-		userRepo.save(user);
+		if (user.getAddress().getUser() == null) {
+			user.getAddress().setUser(user);
+			user.getAddress().setUserId(user.getUserId());
+		}
+		return userRepo.save(user);
 	}
 
 	@Transactional

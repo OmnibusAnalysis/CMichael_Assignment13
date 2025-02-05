@@ -103,7 +103,6 @@ public class User {
 		return address;
 	}
 	public void setAddress(Address address) {
-
 		this.address = address;
 		if (address !=null) {
 			address.setUser(this);

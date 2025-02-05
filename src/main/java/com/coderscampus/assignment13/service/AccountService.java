@@ -16,10 +16,10 @@ public class AccountService {
     private AccountRepository accountRepo;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
 
     public Account saveAccount(Long userId) {
         User user = userService.findById(userId);
@@ -30,7 +30,7 @@ public class AccountService {
         return accountRepo.save(account);
     }
 
-    public Account findById(Long accountId) {
+    public Account findAccountById(Long accountId) {
         Optional<Account> account = accountRepo.findById(accountId);
         return account.orElse(new Account());
     }
