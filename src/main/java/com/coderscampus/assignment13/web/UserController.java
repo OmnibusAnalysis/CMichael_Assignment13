@@ -59,11 +59,31 @@ public class UserController {
 
 		return "users";
 	}
-
 	@PostMapping("/users/{userId}")
-	public String postOneUser(User user) {
-		userService.saveUser(user);
-		return "redirect:/users/" + user.getUserId();
+	public String postOneUser(@PathVariable Long userId, User user) {
+		User existingUser = userService.findById(userId);
+		if (existingUser != null) {
+			existingUser.setName(user.getName());
+			existingUser.setUsername(user.getUsername());
+			existingUser.setPassword(user.getPassword());
+
+			if (existingUser.getAddress() == null) {
+				existingUser.setAddress(user.getAddress());
+			} else {
+				existingUser.getAddress().setAddressLine1(user.getAddress().getAddressLine1());
+				existingUser.getAddress().setAddressLine2(user.getAddress().getAddressLine2());
+				existingUser.getAddress().setCity(user.getAddress().getCity());
+				existingUser.getAddress().setRegion(user.getAddress().getRegion());
+				existingUser.getAddress().setCountry(user.getAddress().getCountry());
+				existingUser.getAddress().setZipCode(user.getAddress().getZipCode());
+			}
+
+			userService.saveUser(existingUser);
+		} else {
+			userService.saveUser(user);
+		}
+		return "redirect:/users/" + userId;
+
 	}
 
 	@PostMapping("/users/{userId}/delete")

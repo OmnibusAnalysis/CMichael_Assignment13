@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.CascadeType;
 
 @Entity
 public class Address {
@@ -26,7 +27,7 @@ public class Address {
 		this.userId = userId;
 	}
 	
-	@OneToOne
+	@OneToOne (cascade = CascadeType.REMOVE)
 	@MapsId
 	@JoinColumn(name="user_id")
 	public User getUser() {

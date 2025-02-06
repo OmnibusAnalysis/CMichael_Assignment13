@@ -17,27 +17,5 @@
     </div>
     <a th:href="@{/users/{userId} (userId = ${user.userId})}">Back</a>
 
-<!--    <div>-->
-<!--       <form th:action="@{/users/{userId}/accounts/{accountId} (userId=${user.userId}, accountId=${account.accountId})}"-->
-<!--              method="post">-->
-<!--           <div>-->
-<!--               <label>Account Name: </label>-->
-<!--               <input type="text" th:field="${account.accountName}" />-->
-<!--           </div>-->
-<!--           <div>-->
-<!--               <input type="submit" value="Update Account" />-->
-<!--           </div>-->
-<!--       </form>-->
-<!--    </div>-->
-<!--    <hr/>-->
-
-<!--    <h2>User Accounts</h2>-->
-<!--    <ul>-->
-<!--        <li th:each="userAccount : ${user.accounts}">-->
-<!--            <a th:href="@{/users/{userId}/accounts/{accountId}(userId=${user.userId}, accountId=${userAccount.accountId})}"-->
-<!--               th:text="${userAccount.accountName}"></a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--    <a method="get" th:href="@{/users/{userId} (userId=${user.userId})}">Back</a>-->
 </body>
 </html>

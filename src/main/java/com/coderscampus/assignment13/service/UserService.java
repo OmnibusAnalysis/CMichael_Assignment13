@@ -57,19 +57,22 @@ public class UserService {
 	}
 
 	public User saveUser(User user) {
+
 		if (user.getAddress() == null) {
 			Address address = new Address();
-
 			user.setAddress(address);
 			address.setUser(user);
 			addressRepo.save(address);
 		}
+
 		if (user.getAddress().getUser() == null) {
 			user.getAddress().setUser(user);
 			user.getAddress().setUserId(user.getUserId());
 		}
+
 		return userRepo.save(user);
 	}
+
 
 	@Transactional
 	public void delete(Long userId) {
