@@ -28,15 +28,30 @@ public class AccountController {
 		return "redirect:/users/" + userId;
 	}
 
-	@GetMapping("users/{userId}/accounts/{accountId}")
-	public String getAccountFromUser(ModelMap model, @PathVariable Long accountId) {
+	@GetMapping("/users/{userId}/accounts/{accountId}")
+	public String getUserAccount(@PathVariable Long userId,
+								 @PathVariable Long accountId,
+								 ModelMap model) {
+		User user = userService.findById(userId);
 		Account account = accountService.findAccountById(accountId);
-		User user = account.getUsers().get(0);
-		model.put("account", account);
-		model.put("user", user);
 
-		return "account";
+		if (user != null && account != null && user.getAccounts().contains(account)) {
+			model.put("user", user);
+			model.put("account", account);
+			return "userAccount";
+		} else {
+			return "redirect:/users/" + userId;
+		}
 	}
+//	@GetMapping("users/{userId}/accounts/{accountId}")
+//	public String getAccountFromUser(ModelMap model, @PathVariable Long accountId) {
+//		Account account = accountService.findAccountById(accountId);
+//		User user = account.getUsers().get(0);
+//		model.put("account", account);
+//		model.put("user", user);
+//
+//		return "account";
+//	}
 
 	@PostMapping("/users/{userId}/accounts/{accountId}")
 	public String changeAccountName(@PathVariable Long userId,
