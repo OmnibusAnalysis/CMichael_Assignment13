@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <link rel="styllesheet" th:href="@{/css/user.css}">
     <meta charset="UTF-8">
     <title>Users</title>
 </head>
@@ -47,7 +48,6 @@
             </div>
             <div>
                 <label for="zipCode">Zip Code: </label>
-                <input type="text" id="zipCode" th:field="*{address.zipCode}" />
             </div>
 
             <div>

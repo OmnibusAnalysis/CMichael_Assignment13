@@ -1,6 +1,7 @@
 package com.coderscampus.assignment13.web;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
 import com.coderscampus.assignment13.domain.Account;
@@ -54,7 +55,7 @@ public class UserController {
 	@GetMapping("/users/{userId}")
 	public String getOneUser(ModelMap model, @PathVariable Long userId) {
 		User user = userService.findById(userId);
-		model.put("users", Arrays.asList(user));
+		model.put("users", Collections.singletonList(user));
 		model.put("user", user);
 
 		return "users";
