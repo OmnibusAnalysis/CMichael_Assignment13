@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AccountController {
@@ -21,12 +22,17 @@ public class AccountController {
 	private UserService userService;
 
 	@PostMapping("users/{userId}/accounts")
-	public String postOneAccount(@PathVariable Long userId) {
-		accountService.saveAccount(userId);
-		System.out.println(userService.findById(userId).getAccounts().size());
-
-		return "redirect:/users/" + userId;
+	public String postOneAccount(@PathVariable Long userId, RedirectAttributes redirectAttributes) {
+		Account newAccount = accountService.saveAccount(userId);
+		redirectAttributes.addFlashAttribute("newAccountId", newAccount.getAccountId());
+		return "redirect/users/" + userId;
 	}
+//	public String postOneAccount(@PathVariable Long userId) {
+//		accountService.saveAccount(userId);
+//		System.out.println(userService.findById(userId).getAccounts().size());
+//
+//		return "redirect:/users/" + userId;
+//	}
 
 	@GetMapping("/users/{userId}/accounts/{accountId}")
 	public String getUserAccount(@PathVariable Long userId,
@@ -34,14 +40,17 @@ public class AccountController {
 								 ModelMap model) {
 		User user = userService.findById(userId);
 		Account account = accountService.findAccountById(accountId);
+		model.put("user", user);
+		model.put("account", account);
+		return "account";
 
-		if (user != null && account != null && user.getAccounts().contains(account)) {
-			model.put("user", user);
-			model.put("account", account);
-			return "userAccount";
-		} else {
-			return "redirect:/users/" + userId;
-		}
+//		if (user != null && account != null && user.getAccounts().contains(account)) {
+//			model.put("user", user);
+//			model.put("account", account);
+//			return "userAccount";
+//		} else {
+//			return "redirect:/users/" + userId;
+//		}
 	}
 //	@GetMapping("users/{userId}/accounts/{accountId}")
 //	public String getAccountFromUser(ModelMap model, @PathVariable Long accountId) {
@@ -65,5 +74,4 @@ public class AccountController {
 		}
 		return "redirect:/users/" + userId + "/accounts/" + accountId;
 	}
-
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Users</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+
 </head>
 
 <body>
@@ -71,10 +72,10 @@
 
         <form th:action="@{/users/{userId}/accounts (userId=${user.userId})}" method="post">
             <input type="submit" value="Create Account"/>
-        </form>
-        <div th:if="${newAcountId != null}">
-            <p>New Account Created. <a th:href="@{/users/{userId}/accounts/{accountId}"</p>
 
+        </form>
+        <div th:if="${newAccountId != null}">
+            <p>New account created. <a th:href="@{/users/{userId}/accounts/{accountId} (userId=${user.userId}, accountId=${newAccountId})}">Edit new account</a></p>Account Created. <a th:href="@{/users/{userId}/accounts/{accountId}}">Edit new account</a></p>
         </div>
         <hr/>
 
