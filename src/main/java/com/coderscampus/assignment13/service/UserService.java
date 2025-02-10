@@ -56,22 +56,63 @@ public class UserService {
 		return userOpt.orElse(new User());
 	}
 
+	@Transactional
 	public User saveUser(User user) {
+		if (user.getUserId() == null) {
+			// This is a new user
+			if (user.getAddress() == null) {
+				Address address = new Address();
+				user.setAddress(address);
+				address.setUser(user);
+			} else {
+				user.getAddress().setUser(user);
+			}
+		} else {
+			// This is an existing user
+			User existingUser = userRepo.findById(user.getUserId()).orElse(null);
+			if (existingUser != null) {
+				// Update existing user's properties
+				existingUser.setUsername(user.getUsername());
+				existingUser.setPassword(user.getPassword());
+				existingUser.setName(user.getName());
 
-		if (user.getAddress() == null) {
-			Address address = new Address();
-			user.setAddress(address);
-			address.setUser(user);
-			addressRepo.save(address);
-		}
+				// Update or create address
+				if (existingUser.getAddress() == null) {
+					Address address = new Address();
+					existingUser.setAddress(address);
+					address.setUser(existingUser);
+				}
+				Address existingAddress = existingUser.getAddress();
+				existingAddress.setAddressLine1(user.getAddress().getAddressLine1());
+				existingAddress.setAddressLine2(user.getAddress().getAddressLine2());
+				existingAddress.setCity(user.getAddress().getCity());
+				existingAddress.setRegion(user.getAddress().getRegion());
+				existingAddress.setCountry(user.getAddress().getCountry());
+				existingAddress.setZipCode(user.getAddress().getZipCode());
 
-		if (user.getAddress().getUser() == null) {
-			user.getAddress().setUser(user);
-			user.getAddress().setUserId(user.getUserId());
+				user = existingUser;
+			}
 		}
 
 		return userRepo.save(user);
 	}
+
+//	public User saveUser(User user) {
+//
+//		if (user.getAddress() == null) {
+//			Address address = new Address();
+//			user.setAddress(address);
+//			address.setUser(user);
+//			addressRepo.save(address);
+//		}
+//
+//		if (user.getAddress().getUser() == null) {
+//			user.getAddress().setUser(user);
+//			user.getAddress().setUserId(user.getUserId());
+//		}
+//
+//		return userRepo.save(user);
+//	}
 
 
 	@Transactional
