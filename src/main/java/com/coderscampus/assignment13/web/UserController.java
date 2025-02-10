@@ -43,54 +43,32 @@ public class UserController {
 	@GetMapping("/users")
 	public String getAllUsers(ModelMap model) {
 		Set<User> users = userService.findAll();
-		System.out.println(users);
 		model.put("users", users);
 		if (users.size() == 1) {
 			model.put("user", users.iterator().next());
 		}
-
 		return "users";
 	}
 
 	@GetMapping("/users/{userId}")
 	public String getOneUser(ModelMap model, @PathVariable Long userId) {
 		User user = userService.findById(userId);
-		model.put("users", Collections.singletonList(user));
+		model.put("users", Arrays.asList(user));
 		model.put("user", user);
 
 		return "users";
 	}
+
 	@PostMapping("/users/{userId}")
-	public String postOneUser(@PathVariable Long userId, User user) {
-		User existingUser = userService.findById(userId);
-		if (existingUser != null) {
-			existingUser.setName(user.getName());
-			existingUser.setUsername(user.getUsername());
-			existingUser.setPassword(user.getPassword());
-
-			if (existingUser.getAddress() == null) {
-				existingUser.setAddress(user.getAddress());
-			} else {
-				existingUser.getAddress().setAddressLine1(user.getAddress().getAddressLine1());
-				existingUser.getAddress().setAddressLine2(user.getAddress().getAddressLine2());
-				existingUser.getAddress().setCity(user.getAddress().getCity());
-				existingUser.getAddress().setRegion(user.getAddress().getRegion());
-				existingUser.getAddress().setCountry(user.getAddress().getCountry());
-				existingUser.getAddress().setZipCode(user.getAddress().getZipCode());
-			}
-
-			userService.saveUser(existingUser);
-		} else {
-			userService.saveUser(user);
-		}
-		return "redirect:/users/" + userId;
-
+	public String postOneUser(User user) {
+		userService.saveUser(user);
+		return "redirect:/users/" + user.getUserId();
 	}
 
 	@PostMapping("/users/{userId}/delete")
 	public String deleteOneUser(@PathVariable Long userId) {
 		userService.delete(userId);
-		return "redirect:/users/";
+		return "redirect:/users";
 	}
 
 }

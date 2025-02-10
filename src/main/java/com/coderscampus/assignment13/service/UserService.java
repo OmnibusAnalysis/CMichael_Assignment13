@@ -23,7 +23,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepo;
 	@Autowired
-	private AccountRepository accountRepo;
+	private AccountRepository accountRepo; 
 	@Autowired
 	private AddressRepository addressRepo;
 
