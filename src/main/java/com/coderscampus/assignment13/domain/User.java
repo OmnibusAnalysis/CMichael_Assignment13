@@ -4,9 +4,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-@Entity // Class name = User, DB Table name = user
+@Entity
 @Table(name = "users")
 public class User {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,13 +27,13 @@ public class User {
 	private String name;
 	private LocalDate createdDate;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_account",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "account_id"))
 	private List<Account> accounts = new ArrayList<>();
 
-	@OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Address address;
 
 	public Long getUserId() {
@@ -80,16 +90,17 @@ public class User {
 			}
 		}
 	}
-
 	public void addAccount(Account account) {
 		if (this.accounts == null) {
 			this.accounts = new ArrayList<>();
 		}
-		if (this.accounts.contains(account)) {
+
+		if (!this.accounts.contains(account)) {
 			this.accounts.add(account);
 			account.addUser(this);
 		}
-	}
+		}
+	
 
 	public void removeAccount(Account account) {
 		if (this.accounts !=null && this.accounts.contains(account)) {
@@ -99,13 +110,16 @@ public class User {
 	}
 
 	public Address getAddress() {
-
 		return address;
 	}
+
 	public void setAddress(Address address) {
-		this.address = address;
-		if (address !=null) {
-			address.setUser(this);
+		if (this.address != null) {
+			this.address.setUser(null);
+		}
+		this.address = address; 
+		if (address != null) {
+			address.setUser(this); 
 		}
 	}
 

@@ -7,6 +7,7 @@ import java.util.Set;
 import com.coderscampus.assignment13.domain.Account;
 import com.coderscampus.assignment13.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.coderscampus.assignment13.domain.User;
 import com.coderscampus.assignment13.service.UserService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -67,8 +69,13 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{userId}/delete")
-	public String deleteOneUser(@PathVariable Long userId) {
-		userService.delete(userId);
+	public String deleteOneUser(@PathVariable Long userId, RedirectAttributes redirectAttributes) {
+		try {
+			userService.delete(userId);
+			redirectAttributes.addFlashAttribute("message", "User deleted successfully");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("error", "Failed to delete user");
+		}
 		return "redirect:/users";
 	}
 
