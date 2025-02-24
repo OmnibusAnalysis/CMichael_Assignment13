@@ -1,15 +1,16 @@
 package com.coderscampus.assignment13.web;
 
-import com.coderscampus.assignment13.domain.Account;
-import com.coderscampus.assignment13.domain.User;
-import com.coderscampus.assignment13.service.AccountService;
-import com.coderscampus.assignment13.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import com.coderscampus.assignment13.domain.Account;
+import com.coderscampus.assignment13.domain.User;
+import com.coderscampus.assignment13.service.AccountService;
+import com.coderscampus.assignment13.service.UserService;
 
 @Controller
 public class AccountController {
@@ -36,6 +37,7 @@ public class AccountController {
 		model.put("user", user);
 		return "account";
 	}
+
 	@PostMapping("users/{userId}/accounts/{accountId}")
 	public String changeUserAccountName(@PathVariable Long userId,
 										@PathVariable Long accountId,
@@ -43,6 +45,6 @@ public class AccountController {
 		Account existingAccount = accountService.findAccountById(accountId);
 		existingAccount.setAccountName(account.getAccountName());
 		accountService.saveAccount(existingAccount);
-		return "redirect:/users/" + userId + "/accounts/" + accountId;
+		return "redirect:/users/" + userId;
 	}
 }

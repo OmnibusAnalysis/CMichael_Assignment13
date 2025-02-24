@@ -1,14 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
-    <title>Account Details</title>
-    <link rel="stylesheet" type="text/css" th:href="@{~/css/styles.css}">
-
-
+    <title>Bank of Awesome - Accounts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Account Details</h1>
 
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Bank of Awesome</a>
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/register">Accounts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav=link" href="/locations">Branch Locations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/info">Information</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2>Account Management</h2>
     <div>
         <form action="" method="post">
             <div>
@@ -19,6 +43,33 @@
         </form>
     </div>
     <a th:href="@{/users/{userId} (userId = ${user.userId})}">Back</a>
+    </div>
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text center mb-4">Account Management </h2>
+
+
+                        <form th:action="@{/users/{userId}/accounts/{accountId}(userId=${user.userId},account=${account.accountId})}" method="post">
+                            <div class="mb-3">
+                                <label for="accountName" class="form-label">Account Name</label>
+                                <input type="text" class="form-control" th:field="${account.accountName}" id="accountName"/>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Update Account</button>
+                                <a th:href="@{/users/{userId}(userId = ${user.userId})}" class="btn btn-secondary">Back</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src ="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.j"></script>
 
 </body>
 </html>
